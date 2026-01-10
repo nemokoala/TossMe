@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
-import { handleCopyToClipboard } from "./utils/clipboard";
+import { handleCopyToClipboard } from "@/components/utils/clipboard";
 
 interface GeneratedLinkProps {
   link: string;

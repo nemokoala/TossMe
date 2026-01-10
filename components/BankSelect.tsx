@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BANKS } from "./constants";
+import { BANKS } from "@/components/constants";
 
 interface BankSelectProps {
   value: string;

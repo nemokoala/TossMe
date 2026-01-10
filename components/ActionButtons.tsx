@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Copy, Download, Smartphone, Check } from "lucide-react";
-import { handleCopyToClipboard } from "./utils/clipboard";
+import { handleCopyToClipboard } from "@/components/utils/clipboard";
 
 interface ActionButtonsProps {
   link: string;
