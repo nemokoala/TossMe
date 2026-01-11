@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const pretendard = localFont({
   src: "../public/fonts/Pretendard.woff2",
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="bg-gray-100 min-h-dvh w-full flex items-center justify-center font-sans">
         {children}
       </body>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
     </html>
   );
 }
