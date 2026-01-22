@@ -14,6 +14,17 @@ export const metadata: Metadata = {
   title: "토스 송금 1초 컷 - TossMe",
   description:
     "계좌번호 복사 붙여넣기 그만! 클릭 한 번으로 송금 화면을 열어보세요.",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",
