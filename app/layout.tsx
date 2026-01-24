@@ -49,6 +49,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className={pretendard.variable}>
+      <meta
+        name="google-site-verification"
+        content="d_AiqUQ3dtlcZ2NFj5vdYWx9PnIBi9wyp2ZoznbgQB4"
+      />
       <body className="bg-gray-100 min-h-dvh w-full flex items-center justify-center font-sans">
         {children}
       </body>
