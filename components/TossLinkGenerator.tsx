@@ -28,6 +28,7 @@ export default function TossLinkGenerator() {
   const [isCopied, setIsCopied] = useState(false);
   const [isCustomBank, setIsCustomBank] = useState(false);
   const [saveEnabled, setSaveEnabled] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // QR 코드 다운로드를 위한 Ref
   const qrRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,7 @@ export default function TossLinkGenerator() {
       if (savedAmount) setAmount(savedAmount);
       if (savedIsCustomBank !== undefined) setIsCustomBank(savedIsCustomBank);
     }
+    setIsHydrated(true);
   }, []);
 
   // saveEnabled 토글 핸들러
@@ -125,7 +127,9 @@ export default function TossLinkGenerator() {
             토스 앱으로 바로 송금할 수 있는 링크를 생성하세요
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent
+          className={`space-y-6 transition-opacity duration-300 ${isHydrated ? "opacity-100" : "opacity-0"}`}
+        >
           {/* 입력 정보 저장 토글 */}
           <div className="flex items-center gap-2">
             <Switch
