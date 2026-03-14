@@ -2,7 +2,7 @@ import { Link2, Sparkles } from "lucide-react";
 
 export default function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center space-y-6 text-center py-16 px-4">
+    <div className="flex flex-col items-center justify-center space-y-6 text-center py-16 px-4 h-[500px]">
       {/* 아이콘 영역 - 그라데이션 배경과 애니메이션 효과 */}
       <div className="relative">
         <div className="w-40 h-40 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 flex items-center justify-center shadow-lg backdrop-blur-sm border border-primary/20">

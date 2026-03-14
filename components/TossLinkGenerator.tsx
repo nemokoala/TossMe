@@ -8,6 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import BankSelect from "@/components/BankSelect";
 import AccountInput from "@/components/AccountInput";
 import AmountInput from "@/components/AmountInput";
@@ -16,6 +18,8 @@ import QRCodeDisplay from "@/components/QRCodeDisplay";
 import ActionButtons from "@/components/ActionButtons";
 import EmptyState from "@/components/EmptyState";
 
+const STORAGE_KEY = "tossme_saved_input";
+
 export default function TossLinkGenerator() {
   const [bank, setBank] = useState("토스뱅크");
   const [accountNo, setAccountNo] = useState("");
@@ -23,9 +27,51 @@ export default function TossLinkGenerator() {
   const [generatedLink, setGeneratedLink] = useState("");
   const [isCopied, setIsCopied] = useState(false);
   const [isCustomBank, setIsCustomBank] = useState(false);
+  const [saveEnabled, setSaveEnabled] = useState(false);
 
   // QR 코드 다운로드를 위한 Ref
   const qrRef = useRef<HTMLDivElement>(null);
+
+  // 마운트 시 저장된 데이터 불러오기
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const {
+        bank: savedBank,
+        accountNo: savedAccountNo,
+        amount: savedAmount,
+        isCustomBank: savedIsCustomBank,
+      } = JSON.parse(saved);
+      setSaveEnabled(true);
+      if (savedBank) setBank(savedBank);
+      if (savedAccountNo) setAccountNo(savedAccountNo);
+      if (savedAmount) setAmount(savedAmount);
+      if (savedIsCustomBank !== undefined) setIsCustomBank(savedIsCustomBank);
+    }
+  }, []);
+
+  // saveEnabled 토글 핸들러
+  const handleSaveToggle = (checked: boolean) => {
+    setSaveEnabled(checked);
+    if (!checked) {
+      localStorage.removeItem(STORAGE_KEY);
+    } else {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ bank, accountNo, amount, isCustomBank }),
+      );
+    }
+  };
+
+  // 저장 활성화 상태에서 입력값 변경 시 로컬스토리지 업데이트
+  useEffect(() => {
+    if (saveEnabled) {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ bank, accountNo, amount, isCustomBank }),
+      );
+    }
+  }, [bank, accountNo, amount, isCustomBank, saveEnabled]);
 
   // 입력값이 변경될 때마다 딥링크 갱신
   useEffect(() => {
@@ -80,6 +126,21 @@ export default function TossLinkGenerator() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* 입력 정보 저장 토글 */}
+          <div className="flex items-center gap-2">
+            <Switch
+              id="save-toggle"
+              checked={saveEnabled}
+              onCheckedChange={handleSaveToggle}
+            />
+            <Label
+              htmlFor="save-toggle"
+              className="text-sm text-muted-foreground cursor-pointer"
+            >
+              입력 정보 저장
+            </Label>
+          </div>
+
           {/* 입력 폼 영역 */}
           <div className="space-y-4">
             <BankSelect
@@ -103,7 +164,7 @@ export default function TossLinkGenerator() {
               }`}
             >
               {isFormComplete && generatedLink ? (
-                <div className="flex flex-col items-center space-y-4">
+                <div className="flex flex-col items-center space-y-4 h-[500px]">
                   <GeneratedLink
                     link={generatedLink}
                     isCopied={isCopied}
