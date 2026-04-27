@@ -13,8 +13,10 @@
 - 🔗 **딥링크 생성**: 토스 앱에서 바로 열 수 있는 딥링크 자동 생성
 - 📱 **QR 코드 생성**: 생성된 링크를 QR 코드로 표시
 - 📋 **링크 복사**: 원클릭으로 링크 복사
-- 💾 **QR 코드 다운로드**: QR 코드를 PNG 이미지로 다운로드
-- 🎨 **모던한 UI**: 부드러운 애니메이션과 반응형 디자인
+- 💾 **QR 이미지 저장**: QR 코드를 PNG 이미지로 저장
+- 💽 **입력 정보 저장 (로컬)**: 「입력 정보 저장」스위치를 켜면 은행·계좌·금액·커스텀 은행 여부를 브라우저 `localStorage`에 저장하고, 다음 방문 시 자동으로 불러옵니다. 끄면 저장 데이터는 삭제됩니다. (키: `tossme_saved_input`)
+- 📲 **앱 열기**: 생성된 딥링크로 토스 앱 송금 화면을 바로 시도해 열 수 있습니다
+- 🎨 **모던한 UI**: 부드러운 애니메이션과 반응형 디자인, Pretendard 로컬 폰트
 
 ## 🛠️ 기술 스택
 
@@ -22,9 +24,10 @@
 - **React 19** - UI 라이브러리
 - **TypeScript** - 타입 안정성
 - **Tailwind CSS** - 유틸리티 우선 CSS 프레임워크
-- **Radix UI** - 접근성 높은 UI 컴포넌트
+- **Radix UI** - 접근성 높은 UI 컴포넌트 (Select, Switch, Label 등)
 - **Lucide React** - 아이콘 라이브러리
 - **qrcode.react** - QR 코드 생성 라이브러리
+- **@next/third-parties** - Google Analytics 연동 (선택)
 
 ## 📦 설치 및 실행
 
@@ -64,47 +67,55 @@ npm run build
 npm start
 ```
 
+### 환경 변수 (선택)
+
+| 변수                | 설명                                                              |
+| ------------------- | ----------------------------------------------------------------- |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics 측정 ID. 없으면 GA 스크립트는 주입되지 않습니다. |
+
 ## 📁 프로젝트 구조
 
 ```
 tossme/
 ├── app/
-│   ├── components/          # 컴포넌트 디렉토리
-│   │   ├── TossLinkGenerator.tsx  # 메인 생성기 컴포넌트
-│   │   ├── BankSelect.tsx         # 은행 선택 컴포넌트
-│   │   ├── AccountInput.tsx       # 계좌번호 입력 컴포넌트
-│   │   ├── AmountInput.tsx        # 금액 입력 컴포넌트
-│   │   ├── GeneratedLink.tsx      # 생성된 링크 표시
-│   │   ├── QRCodeDisplay.tsx     # QR 코드 표시
-│   │   ├── ActionButtons.tsx      # 액션 버튼들
-│   │   ├── EmptyState.tsx         # 빈 상태 UI
-│   │   └── utils/                 # 유틸리티 함수
-│   ├── layout.tsx          # 루트 레이아웃
-│   ├── page.tsx            # 홈 페이지
-│   └── globals.css         # 전역 스타일
+│   ├── layout.tsx          # 루트 레이아웃, 메타데이터, Pretendard, GA
+│   ├── page.tsx            # 홈 (TossLinkGenerator)
+│   ├── globals.css         # 전역 스타일
+│   └── sitemap.ts          # 사이트맵
 ├── components/
-│   └── ui/                  # 공통 UI 컴포넌트
-│       ├── button.tsx
-│       ├── card.tsx
-│       ├── input.tsx
-│       └── select.tsx
+│   ├── TossLinkGenerator.tsx  # 메인 생성기 (딥링크·로컬스토리지)
+│   ├── BankSelect.tsx
+│   ├── AccountInput.tsx
+│   ├── AmountInput.tsx
+│   ├── GeneratedLink.tsx
+│   ├── QRCodeDisplay.tsx
+│   ├── ActionButtons.tsx
+│   ├── EmptyState.tsx
+│   ├── constants.ts        # 은행 목록
+│   ├── utils/
+│   │   └── clipboard.ts
+│   └── ui/                 # shadcn 스타일 공통 컴포넌트
 ├── lib/
-│   └── utils.ts            # 유틸리티 함수
-├── public/                  # 정적 파일
-├── package.json            # 프로젝트 의존성
-├── tsconfig.json           # TypeScript 설정
-├── tailwind.config.ts      # Tailwind CSS 설정
-└── next.config.ts          # Next.js 설정
+│   └── utils.ts
+├── public/
+│   ├── fonts/              # Pretendard.woff2
+│   ├── icon.png
+│   └── robots.txt
+├── package.json
+├── tsconfig.json
+├── tailwind.config.ts
+└── next.config.ts
 ```
 
 ## 🎯 사용 방법
 
-1. **은행 선택**: 드롭다운에서 은행을 선택하거나 직접 입력
-2. **계좌번호 입력**: 송금받을 계좌번호를 입력 (하이픈 자동 제거)
-3. **금액 입력** (선택사항): 송금할 금액을 입력 (천 단위 구분자 자동 추가)
-4. **링크 생성**: 입력이 완료되면 자동으로 딥링크가 생성됩니다
-5. **QR 코드 확인**: 생성된 링크의 QR 코드가 자동으로 표시됩니다
-6. **링크 복사 또는 QR 코드 다운로드**: 버튼을 클릭하여 링크를 복사하거나 QR 코드를 다운로드할 수 있습니다
+1. **(선택) 입력 정보 저장**: 「입력 정보 저장」을 켜면 이 기기 브라우저에 입력값이 유지됩니다. 끄면 저장이 지워집니다.
+2. **은행 선택**: 드롭다운에서 은행을 선택하거나 직접 입력
+3. **계좌번호 입력**: 송금받을 계좌번호를 입력 (하이픈 자동 제거)
+4. **금액 입력** (선택사항): 송금할 금액을 입력 (천 단위 구분자 자동 추가)
+5. **링크 생성**: 입력이 완료되면 자동으로 딥링크가 생성됩니다
+6. **QR 코드 확인**: 생성된 링크의 QR 코드가 자동으로 표시됩니다
+7. **QR 이미지 저장 / 링크 복사 / 앱 열기**: 버튼으로 QR 저장, 링크 복사, 또는 토스 앱으로 바로 열기를 할 수 있습니다
 
 ## 🔗 딥링크 형식
 
