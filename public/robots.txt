@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://toss-me.vercel.app/sitemap.xml
