@@ -96,11 +96,6 @@ export default function TossLinkGenerator() {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  // 모바일 앱 열기 테스트
-  const handleTestLink = () => {
-    window.location.href = generatedLink;
-  };
-
   // QR 코드 이미지 다운로드 핸들러
   const handleDownloadQR = () => {
     const canvas = qrRef.current?.querySelector("canvas");
@@ -181,7 +176,6 @@ export default function TossLinkGenerator() {
                     isCopied={isCopied}
                     onCopy={handleCopy}
                     onDownloadQR={handleDownloadQR}
-                    onTestLink={handleTestLink}
                   />
                 </div>
               ) : (

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Copy, Download, Smartphone, Check } from "lucide-react";
+import { Copy, Download, Check } from "lucide-react";
 import { handleCopyToClipboard } from "@/components/utils/clipboard";
 
 interface ActionButtonsProps {
@@ -10,7 +10,6 @@ interface ActionButtonsProps {
   isCopied: boolean;
   onCopy: () => void;
   onDownloadQR: () => void;
-  onTestLink: () => void;
 }
 
 export default function ActionButtons({
@@ -19,7 +18,6 @@ export default function ActionButtons({
   isCopied,
   onCopy,
   onDownloadQR,
-  onTestLink,
 }: ActionButtonsProps) {
   const handleCopy = async () => {
     await handleCopyToClipboard(link, onCopy);
@@ -32,32 +30,25 @@ export default function ActionButtons({
         QR 이미지 저장
       </Button>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Button
-          onClick={handleCopy}
-          variant="default"
-          className={`transition-colors duration-300 ${
-            isCopied ? "bg-green-600 hover:bg-green-700" : ""
-          }`}
-        >
-          {isCopied ? (
-            <>
-              <Check className="mr-2 h-4 w-4" />
-              복사됨
-            </>
-          ) : (
-            <>
-              <Copy className="mr-2 h-4 w-4" />
-              링크 복사
-            </>
-          )}
-        </Button>
-
-        <Button onClick={onTestLink} variant="secondary">
-          <Smartphone className="mr-2 h-4 w-4" />
-          앱 열기
-        </Button>
-      </div>
+      <Button
+        onClick={handleCopy}
+        variant="default"
+        className={`w-full transition-colors duration-300 ${
+          isCopied ? "bg-green-600 hover:bg-green-700" : ""
+        }`}
+      >
+        {isCopied ? (
+          <>
+            <Check className="mr-2 h-4 w-4" />
+            복사됨
+          </>
+        ) : (
+          <>
+            <Copy className="mr-2 h-4 w-4" />
+            링크 복사
+          </>
+        )}
+      </Button>
     </div>
   );
 }
